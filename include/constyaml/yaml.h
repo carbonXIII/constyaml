@@ -5,8 +5,8 @@
 #include <optional>
 
 #include "types.h"
-#include "const_dict.h"
-#include "const_list.h"
+#include "dict.h"
+#include "list.h"
 
 namespace constyaml::yaml {
   namespace detail {
@@ -221,7 +221,7 @@ namespace constyaml::yaml {
 
     else if constexpr(flat[node].type == Type::MAP) {
       return [&]<std::size_t... I>(std::index_sequence<I...>) {
-        return const_dict {
+        return dict {
           std::pair {
             parse_unfold<flat, flat[node].s+I*2>(get_substr),
             parse_unfold<flat, flat[node].s+I*2+1>(get_substr)
@@ -232,7 +232,7 @@ namespace constyaml::yaml {
 
     else if constexpr(flat[node].type == Type::LIST) {
       return [&]<std::size_t... I>(std::index_sequence<I...>) {
-        return const_list {
+        return list {
           parse_unfold<flat, flat[node].s+I>(get_substr)...
         };
       }(std::make_index_sequence<flat[node].t - flat[node].s>{});

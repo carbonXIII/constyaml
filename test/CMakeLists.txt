@@ -15,6 +15,6 @@ function(add_test name)
   gtest_discover_tests(${name})
 endfunction()
 
-add_test(test_const_list)
-add_test(test_const_dict)
+add_test(test_list)
+add_test(test_dict)
 add_test(test_yaml)

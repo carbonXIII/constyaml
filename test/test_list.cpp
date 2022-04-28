@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
 
 #include <constyaml/types.h>
-#include <constyaml/const_list.h>
+#include <constyaml/list.h>
 
 using namespace constyaml;
 
 TEST(ConstList, IsStructural) {
   using namespace std::literals;
 
-  static constexpr const_list list = {
+  static constexpr list list = {
     string_literal{"foo"},
     string_literal{"bar"},
     50,

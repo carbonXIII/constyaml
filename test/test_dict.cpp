@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
 #include <constyaml/types.h>
-#include <constyaml/const_dict.h>
+#include <constyaml/dict.h>
 
 using namespace constyaml;
 
 TEST(ConstDict, IsStructural) {
-  static constexpr const_dict dict = {
+  static constexpr dict dict = {
     std::pair {string_literal{"foo"}, string_literal{"bar"}},
     std::pair {string_literal{"apple"}, 420},
     std::pair {string_literal{"orange"}, 69}

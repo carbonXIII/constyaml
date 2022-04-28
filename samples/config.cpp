@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string_view>
 
-#include <constyaml/const_dict.h>
+#include <constyaml/dict.h>
 #include <constyaml/yaml.h>
 
 using namespace constyaml;
@@ -18,13 +18,13 @@ constexpr int parse_unsigned(const std::string_view s) {
   return ret;
 }
 
-constexpr int parse_true_false(const std::string_view s) {
+constexpr bool parse_true_false(const std::string_view s) {
   if(s == "true") return true;
   if(s != "false") parser_error("expected true or false");
   return false;
 }
 
-template <const_dict dict>
+template <dict dict>
 struct config_impl {
 #define REQUIRE(x,y) static auto x() {                                  \
     static constexpr auto v = get<dict>([]() { return #x##sv; });       \
