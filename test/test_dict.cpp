@@ -4,6 +4,8 @@
 #include <constyaml/dict.h>
 
 using namespace constyaml;
+using namespace constyaml::literals;
+using namespace std::literals;
 
 TEST(ConstDict, IsStructural) {
   static constexpr dict dict = {
@@ -12,12 +14,8 @@ TEST(ConstDict, IsStructural) {
     std::pair {string_literal{"orange"}, 69}
   };
 
-  {
-    using namespace std::literals;
-
-    static_assert(get<dict>([]() { return "foo"sv; }) == "bar"sv);
-    static_assert(get<dict>([]() { return "apple"sv; }) == 420);
-    static_assert(get<dict>([]() { return "orange"sv; }) == 69);
-  }
+  static_assert(get<dict>("foo"_k) == "bar"sv);
+  static_assert(get<dict>("apple"_k) == 420);
+  static_assert(get<dict>("orange"_k) == 69);
 }
 

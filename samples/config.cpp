@@ -5,6 +5,7 @@
 #include <constyaml/yaml.h>
 
 using namespace constyaml;
+using namespace constyaml::literals;
 using namespace std::literals;
 
 void parser_error(auto) {}
@@ -26,10 +27,10 @@ constexpr bool parse_true_false(const std::string_view s) {
 
 template <dict dict>
 struct config_impl {
-#define REQUIRE(x,y) static auto x() {                                  \
-    static constexpr auto v = get<dict>([]() { return #x##sv; });       \
-    static constexpr auto v2 = y(v);                                    \
-    return v2;                                                          \
+#define REQUIRE(x,y) static auto x() {            \
+    static constexpr auto v = get<dict>(#x##_k);  \
+    static constexpr auto v2 = y(v);              \
+    return v2;                                    \
   }
 
   REQUIRE(apple, parse_unsigned);

@@ -55,4 +55,33 @@ namespace constyaml {
 
     return get_value<idx>(dict);
   }
+
+  template <auto... v>
+  struct Keys {
+    template <auto... ov>
+    constexpr auto operator/ (Keys<ov...> o) {
+      return Keys<v..., ov...>{};
+    }
+  };
+
+  namespace literals {
+    template <string_literal s> constexpr auto operator "" _k() { return Keys<s>{}; }
+  }
+
+  template <dict dict, auto s>
+  constexpr auto get(Keys<s> key = {}) {
+    constexpr int idx = [&]<std::size_t... I>(std::index_sequence<I...>) {
+      int ret;
+      ((get_key<I>(dict) == s && (ret = I)) || ... );
+      return ret;
+    }(std::make_index_sequence<dict.N>{});
+
+    return get_value<idx>(dict);
+  }
+
+  template <dict dict, auto s, auto... t>
+  constexpr auto get(Keys<s, t...> key = {}) {
+    constexpr auto ndict = get<dict, s>(Keys<s>{});
+    return get<ndict>(Keys<t...>{});
+  }
 }
