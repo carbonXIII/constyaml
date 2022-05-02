@@ -7,13 +7,9 @@ using namespace constyaml;
 TEST(Yaml, YamlParsingFlat) {
   using namespace std::literals;
 
-  static constexpr auto A = yaml::parse_flat([]() {
-    return "a:\n  x: 99\n  y:\n  - 4\n  - 5\n  - 6\nb: 2\nc: 3\n"sv;
-  });
+  static constexpr auto A = yaml::detail::parse_flat("a:\n  x: 99\n  y:\n  - 4\n  - 5\n  - 6\nb: 2\nc: 3\n"sv);
 
-  static constexpr auto B = yaml::parse_flat([]() {
-    return "name: Ford Prefect\nage: 42\npossessions:\n- Towel\n"sv;
-  });
+  static constexpr auto B = yaml::detail::parse_flat("name: Ford Prefect\nage: 42\npossessions:\n- Towel\n"sv);
 }
 
 TEST(Yaml, YamlParsingUnfolded) {
