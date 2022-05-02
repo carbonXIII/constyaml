@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string_view>
 
-#include <constyaml/dict.h>
 #include <constyaml/yaml.h>
 
 using namespace constyaml;
@@ -27,25 +26,21 @@ constexpr bool parse_true_false(const std::string_view s) {
 
 template <dict dict>
 struct config_impl {
-#define REQUIRE(x,y) static auto x() {            \
-    static constexpr auto v = get<dict>(#x##_k);  \
-    static constexpr auto v2 = y(v);              \
-    return v2;                                    \
-  }
+  static constexpr auto require(auto key, auto parse) { return parse(get<dict>(key)); }
+  static constexpr auto require(auto key) { return get<dict>(key); }
 
-  REQUIRE(apple, parse_unsigned);
-  REQUIRE(banana, parse_true_false);
-  REQUIRE(orange, std::string_view);
-
-#undef REQUIRE
+  static constexpr int apple = require("apple"_k, parse_unsigned);
+  // static constexpr auto apple = require("apple"_k, parse_true_false); // error!
+  static constexpr bool banana = require("banana"_k, parse_true_false);
+  static constexpr string_literal orange = require("orange"_k);
 };
 
-using config = config_impl<yaml::parse([]() { return "apple: 714\nbanana: true\norange: 2\n"sv; })>;
+using config = config_impl<"apple: 714\nbanana: true\norange: 2\n"_yaml>;
 
 int main() {
-  std::cout << config::apple() << std::endl;
-  std::cout << config::banana() << std::endl;
-  std::cout << config::orange() << std::endl;
+  std::cout << config::apple << std::endl;
+  std::cout << config::banana << std::endl;
+  std::cout << config::orange << std::endl;
 
   return 0;
 }

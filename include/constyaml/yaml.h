@@ -4,6 +4,7 @@
 #include <vector>
 #include <optional>
 #include <tuple>
+#include <string_view>
 
 #include "types.h"
 #include "dict.h"
@@ -298,5 +299,11 @@ namespace constyaml::yaml {
     constexpr auto body = callable();
     constexpr auto flat = detail::parse_flat(body);
     return detail::parse_unfold<flat, 0>(body);
+  }
+}
+
+namespace constyaml::literals {
+  template <string_literal s> constexpr auto operator "" _yaml() {
+    return yaml::parse([](){ return (std::string_view)s; });
   }
 }
